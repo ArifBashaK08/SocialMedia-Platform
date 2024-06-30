@@ -1,0 +1,5 @@
+export {default as Homepage} from "./Homepage"
+export {default as Loginpage} from "./Loginpage"
+export {default as Navbar} from "./Navbar"
+export {default as Profilepage} from "./Profilepage"
+export {default as Widgets} from "./Widgets"

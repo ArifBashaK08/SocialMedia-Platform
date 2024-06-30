@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@400;500;700&family=Rubik:ital,wght@400;500;700&display=swap');
+
+html,
+body,
+#root,
+.app {
+  height: 100%;
+  width: 100%;
+  font-family: "Poppins", "Rubik", sans-serif;
+}
+
+.bg-dark {
+  cursor: pointer;
+  font-weight: 900;
+  color: transparent;
+  background-clip: text;
+  background: linear-gradient(90deg, rgba(0, 150, 136, 1) 0%, rgba(156, 39, 176, 1) 100%);
+  -webkit-background-clip: text;
+}
+
+.bg-light {
+  cursor: pointer;
+  font-weight: 900;
+  color: transparent;
+  background-clip: text;
+  background: linear-gradient(90deg, rgba(0, 150, 136, 1) 29%, rgba(156, 39, 176, 1) 100%);
+  -webkit-background-clip: text;
+}
+
+.glass-effect {
+  background: rgba(46, 46, 46, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.text-contrast {
+  mix-blend-mode: difference;
+  font-weight: 900;
+}
