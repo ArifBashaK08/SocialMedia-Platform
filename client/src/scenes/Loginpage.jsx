@@ -1,6 +1,6 @@
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import Form from "../components/Form";
-import { bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10 } from "../../public/assets/login";
+import {bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10} from "../assets/login"
 
 const Loginpage = ({ title }) => {
   const theme = useTheme();

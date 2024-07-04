@@ -28,7 +28,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: "/images/user.png",
     },
-    firends: {
+    friends: {
         type: Array,
         default: [],
     },

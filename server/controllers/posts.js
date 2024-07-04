@@ -1,20 +1,46 @@
 import PostModel from "../models/posts.js"
 import UserModel from "../models/users.js"
+import { v2 as cloudinary } from "cloudinary";
 
 // Create a Post
 export const createPost = async (req, res) => {
     try {
-        const { userId, description, file } = req.body
+        console.log("Creating Post");
+
+        const { userId, description } = req.body
 
         const foundUser = await UserModel.findById(userId)
 
-        console.log("Found User - ", foundUser);
+        let fileLink = null;
+        if (req.file) {
+            // Handle the Cloudinary upload
+            const result = await new Promise((resolve, reject) => {
+                const stream = cloudinary.uploader.upload_stream(
+                    {
+                        resource_type: "image",
+                        folder: "social_media_app",
+                    },
+                    (error, result) => {
+                        if (error) {
+                            reject(new Error("Unable to upload"));
+                        } else {
+                            resolve(result);
+                        }
+                    }
+                );
+                stream.end(req.file.buffer);
+            });
+
+            fileLink = result.secure_url;
+        }
+
+        console.log("File: ", fileLink);
 
         const newPost = new PostModel({
             userId, firstName: foundUser.firstName,
             lastName: foundUser.lastName,
             location: foundUser.location,
-            description, fileLink: file,
+            description, fileLink,
             imgLink: foundUser.imgLink,
             likes: {},
             comments: []

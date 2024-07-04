@@ -1,0 +1,14 @@
+{
+  "name": "socialmedia-app",
+  "version": "1.0.0",
+  "description": "A social media application that built based on MERN Stack",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
+}

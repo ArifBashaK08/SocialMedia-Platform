@@ -26,13 +26,14 @@ const Navbar = ({title}) => {
   return (
     <FlexBetween padding="1rem 6%" backgroundColor={alt}>
       <FlexBetween gap={"1.75rem"}>
-      <Typography>
-        <h1 className={`${theme.palette.mode === "dark" ? "bg-dark": "bg-light"}`}
-          style={{
-            margin: 0,
-          }}
-          onClick={() => navigate("/home")}
-        >{title}</h1>
+      <Typography 
+      className={`${theme.palette.mode === "dark" ? "bg-dark": "bg-light"}`} onClick={() => navigate("/home")}
+      style={{
+        fontSize: "2rem",
+        margin: 0,
+        fontWeight: 900,
+      }}>
+          {title}
         </Typography>
 
         {/* For small screens */}

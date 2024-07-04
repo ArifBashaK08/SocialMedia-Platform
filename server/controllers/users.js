@@ -1,5 +1,16 @@
 import UserModel from "../models/users.js";
 
+const getAllUsers = async (req, res) => {
+    try {
+
+        const allUsers = await UserModel.find({})
+
+        return res.status(200).json(allUsers)
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+}
+
 const getUser = async (req, res) => {
     try {
         const { id } = req.params
@@ -73,4 +84,4 @@ const addRemoveFriends = async (req, res) => {
     }
 }
 
-export {getUser, friendsList, addRemoveFriends}
+export {getUser, friendsList, addRemoveFriends, getAllUsers}

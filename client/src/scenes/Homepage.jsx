@@ -1,9 +1,29 @@
-import { Box } from "@mui/material"
+import { Box, useMediaQuery } from "@mui/material"
 import { Navbar } from "."
+import { useSelector } from "react-redux"
+import { UserWidgets, MyPostWidget, PostsWidget } from "."
 
 const Homepage = () => {
+  const isNotMobileScreen = useMediaQuery("(min-width: 1000px)")
+  const { _id, imgLink } = useSelector(state => state.user)
+
   return <Box>
+    
     <Navbar title={"Vibes.com"} />
+    <Box width={"100%"} padding={"2rem 6rem"} display={isNotMobileScreen ? "flex" : "block"}
+      gap="0.5rem"
+      justifyContent="space-between">
+      <Box flexBasis={isNotMobileScreen ? "26%" : undefined}>
+        <UserWidgets id={_id} image={imgLink} />
+      </Box>
+      <Box
+        flexBasis={isNotMobileScreen ? "42%" : undefined}
+        mt={isNotMobileScreen ? undefined : "2rem"}>
+        <MyPostWidget image={imgLink} />
+        <PostsWidget userId={_id}/>
+      </Box>
+      {isNotMobileScreen && <Box flexBasis="42%" ></Box>}
+    </Box>
   </Box>
 
 }
