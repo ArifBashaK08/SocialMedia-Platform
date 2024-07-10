@@ -54,6 +54,9 @@ const storage = multer.memoryStorage();
 export const upload = multer({ storage });
 
 //============ ROUTES ============//
+app.get("/", (req, res) => {
+    res.status(200).send("Hello, server is working!")
+})
 app.post("/signup", upload.single("profilePic"), signUp);
 app.post("/posts", verifyToken, upload.single("file"), (req, res, next) => {
     console.log(req.body); // Log the body fields
