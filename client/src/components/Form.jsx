@@ -58,7 +58,7 @@ const Form = () => {
     }
     formData.append("profilePic", values.profilePic.name);
 
-    const saveResponse = await fetch(`${apiURL}/auth/signup`, {
+    const saveResponse = await fetch(`${apiURL}/signup`, {
       method: "POST",
       body: formData,
     });
@@ -71,22 +71,29 @@ const Form = () => {
   };
 
   const signIn = async (values, onsubmitProps) => {
-    const logInResponse = await fetch(`${apiURL}/auth/signin`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
-    });
-    const loggedIn = await logInResponse.json();
-    if (loggedIn) {
-      dispatch(
-        setLogin({
-          user: loggedIn.user,
-          token: loggedIn.token,
-        })
-      );
-      navigate("/home");
+    try {
+      const logInResponse = await fetch(`${apiURL}/auth/signin`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+      const loggedIn = await logInResponse.json();
+      onsubmitProps.resetForm();
+      if (loggedIn) {
+        dispatch(
+          setLogin({
+            user: loggedIn.user,
+            token: loggedIn.token,
+          })
+        );
+        navigate("/home");
+      } else {
+        navigate("*", { state: { message: loggedIn.message } })
+      }
+    } catch (error) {
+      console.error("Failed to login", error);
     }
-  };
+  }
 
   const formHandler = async (values, onsubmitProps) => {
     if (isSignin) await signIn(values, onsubmitProps);
@@ -95,7 +102,6 @@ const Form = () => {
 
   return (
     <Formik
-      sx={{ overflow: "auto" }}
       onSubmit={formHandler}
       initialValues={isSignin ? signInInitialValues : signUpInitialValues}
       validationSchema={isSignin ? signInSchema : signUpSchema}

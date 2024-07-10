@@ -1,7 +1,7 @@
 import {
   ManageAccountsOutlined,
   EditOutlined, LocationOnOutlined,
-  WorkOutlineOutlined, ConnectWithoutContactOutlined 
+  WorkOutlineOutlined, ConnectWithoutContactOutlined
 } from "@mui/icons-material"
 import { Box, Typography, Divider, useTheme } from "@mui/material"
 import { UserImage, FlexBetween, WidgetWrapper } from "../../components"
@@ -14,6 +14,7 @@ const UserWidgets = ({ id, image }) => {
   const { palette } = useTheme()
   const navigate = useNavigate()
   const token = useSelector(state => state.token)
+  const friendCount = useSelector(state => state.user?.friends)
   const dark = palette.neutral.dark
   const medium = palette.neutral.medium
   const main = palette.neutral.main
@@ -30,7 +31,7 @@ const UserWidgets = ({ id, image }) => {
 
   useEffect(() => {
     getUser()
-  }, [])
+  }, [friendCount])
 
   if (!user) return null
 
@@ -57,7 +58,7 @@ const UserWidgets = ({ id, image }) => {
             {firstName} {lastName}
           </Typography>
           <Typography color={medium}>
-            {friends.length} friends
+            {friends?.length} friends
           </Typography>
         </Box>
       </FlexBetween>
@@ -69,22 +70,22 @@ const UserWidgets = ({ id, image }) => {
     {/* 2nd Row */}
     <Box p="1rem 0">
       <Box display={"flex"} alignItems="center" gap="1rem" mb={".5rem"}>
-      <ConnectWithoutContactOutlined  fontSize="large" sx={{ color: main }} />
-          <Typography color={medium}>
-            {email}
-          </Typography>
+        <ConnectWithoutContactOutlined fontSize="large" sx={{ color: main }} />
+        <Typography color={medium}>
+          {email}
+        </Typography>
       </Box>
       <Box display={"flex"} alignItems="center" gap="1rem" mb={".5rem"}>
         <LocationOnOutlined fontSize="large" sx={{ color: main }} />
-          <Typography color={medium}>
-            {location}
-          </Typography>
+        <Typography color={medium}>
+          {location}
+        </Typography>
       </Box>
       <Box display={"flex"} alignItems="center" gap="1rem">
         <WorkOutlineOutlined fontSize="large" sx={{ color: main }} />
-          <Typography color={medium}>
-            {occupation}
-          </Typography>
+        <Typography color={medium}>
+          {occupation}
+        </Typography>
       </Box>
     </Box>
 

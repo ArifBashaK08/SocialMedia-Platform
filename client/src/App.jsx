@@ -1,5 +1,5 @@
-import { Homepage, Loginpage, Profilepage } from "./scenes"
-import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom"
+import { ErrorPage, Homepage, Loginpage, Profilepage } from "./scenes"
+import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { useMemo } from "react"
 import { useSelector } from "react-redux"
 import { CssBaseline, ThemeProvider } from "@mui/material"
@@ -21,6 +21,7 @@ function App() {
               <Route path="/" element={<Loginpage title={"Vibes.com"}/>} />
               <Route path="/home" element={<Homepage />} />
               <Route path="/profile/:userid" element={<Profilepage />} />
+              <Route path="*" element={<ErrorPage />} />
             </Routes>
           </ThemeProvider>
         </BrowserRouter>

@@ -8,7 +8,7 @@ const userRouter = express.Router()
 userRouter.get("/", getAllUsers)
 
 userRouter.get("/:id", verifyToken, getUser)
-userRouter.get("/friends", verifyToken, friendsList)
+userRouter.get("/:id/friends", verifyToken, friendsList)
 
 userRouter.patch("/:id/:friendId", verifyToken, addRemoveFriends)
 

@@ -58,7 +58,7 @@ export const createPost = async (req, res) => {
 // Get all posts
 export const getFeedPost = async (req, res) => {
     try {
-        const posts = await PostModel.find()
+        const posts = await PostModel.find().sort({ createdAt: -1 })
 
         return res.status(200).json(posts)
     } catch (error) {

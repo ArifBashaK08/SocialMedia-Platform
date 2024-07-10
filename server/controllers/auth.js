@@ -66,7 +66,7 @@ export const signUp = async (req, res) => {
 export const signIn = async (req, res) => {
     try {
         const { email, password } = req.body;
-        
+
         const foundUser = await UserModel.findOne({ email });
 
         if (!foundUser) return res.status(404).json({ msg: "User not found..!" });

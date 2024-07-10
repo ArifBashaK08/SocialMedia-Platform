@@ -1,12 +1,17 @@
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import Form from "../components/Form";
-import {bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10} from "../assets/login"
+import { bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10 } from "../assets/login"
+import { useEffect } from "react";
 
 const Loginpage = ({ title }) => {
   const theme = useTheme();
   const isNotMobileScreen = useMediaQuery("(min-width: 1000px)");
   const loginBg = [bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10];
   const randomBg = Math.floor(Math.random() * loginBg.length);
+
+  useEffect(() => {
+    document.title = `User authentication | ${title}`
+  }, [])
 
   return (
     <Box
@@ -29,8 +34,8 @@ const Loginpage = ({ title }) => {
         // bgcolor={theme.palette.background.alt}
         textAlign="center"
       >
-        <Typography>
-          <h1 style={{
+        <Typography variant="h2"
+          style={{
             cursor: "pointer",
             fontWeight: 900,
             margin: 0,
@@ -39,8 +44,7 @@ const Loginpage = ({ title }) => {
             backgroundClip: 'text',
             color: 'transparent'
           }}>
-            {title}
-          </h1>
+          {title}
         </Typography>
       </Box>
       <Box
