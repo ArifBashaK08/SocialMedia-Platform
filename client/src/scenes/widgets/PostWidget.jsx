@@ -25,7 +25,7 @@ const PostWidget = ({ postId, postUserId, name, description, location, imgLink, 
 
 
   const patchLike = async () => {
-    const response = await fetch(`http://localhost:3001/posts/${postId}/like`, {
+    const response = await fetch(`https://vibes-teal.vercel.app/posts/${postId}/like`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -37,8 +37,6 @@ const PostWidget = ({ postId, postUserId, name, description, location, imgLink, 
     const updatedPost = await response.json();
     dispatch(setPost({ post: updatedPost }));
   };
-
-  console.log(location)
 
   return (
     <WidgetWrapper m={"2rem 0"}>

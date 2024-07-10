@@ -32,7 +32,7 @@ app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors(
     {
-        origin: ["websitelink"],
+        origin: ["https://vibes-teal.vercel.app/"],
         methods: ["POST", "GET"],
         credentials: true
     }

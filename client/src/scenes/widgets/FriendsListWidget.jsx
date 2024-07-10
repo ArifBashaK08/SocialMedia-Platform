@@ -15,7 +15,7 @@ const FriendsListWidget = ({ id }) => {
     const friends = useSelector(state => state.user.friends);
 
     const getFriends = async () => {
-        const response = await fetch(`http://localhost:3001/users/${id}/friends`, {
+        const response = await fetch(`https://vibes-teal.vercel.app/users/${id}/friends`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`

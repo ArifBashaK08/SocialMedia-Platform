@@ -34,7 +34,7 @@ const MyPostWidget = ({ image }) => {
       formData.append("image", postImage.name);
     }
 
-    const response = await fetch(`http://localhost:3001/posts`, {
+    const response = await fetch(`https://vibes-teal.vercel.app/posts`, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
       body: formData,
