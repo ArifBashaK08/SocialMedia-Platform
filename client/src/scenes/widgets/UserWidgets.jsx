@@ -9,7 +9,7 @@ import { useSelector } from "react-redux"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-const UserWidgets = ({ id, image }) => {
+const UserWidgets = ({ id, image, apiURL}) => {
   const [user, setUser] = useState(null)
   const { palette } = useTheme()
   const navigate = useNavigate()
@@ -20,7 +20,7 @@ const UserWidgets = ({ id, image }) => {
   const main = palette.neutral.main
 
   const getUser = async () => {
-    const response = await fetch(`https://vibes-teal.vercel.app/users/${id}`, {
+    const response = await fetch(`${apiURL}/users/${id}`, {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` }
     })

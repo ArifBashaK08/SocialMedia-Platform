@@ -13,7 +13,7 @@ import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { setPosts } from "../../state"
 
-const MyPostWidget = ({ image }) => {
+const MyPostWidget = ({ image, apiURL }) => {
   const dispatch = useDispatch();
   const [isImage, setIsImage] = useState(false);
   const [postImage, setPostImage] = useState(null);
@@ -34,7 +34,7 @@ const MyPostWidget = ({ image }) => {
       formData.append("image", postImage.name);
     }
 
-    const response = await fetch(`https://vibes-teal.vercel.app/posts`, {
+    const response = await fetch(`${apiURL}/posts`, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
       body: formData,

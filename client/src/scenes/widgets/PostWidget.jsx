@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "../../state";
 import { Friend } from "../../components";
 
-const PostWidget = ({ postId, postUserId, name, description, location, imgLink, fileLink, likes = {}, comments = [] }) => {
+const PostWidget = ({ apiURL, postId, postUserId, name, description, location, imgLink, fileLink, likes = {}, comments = [] }) => {
 
   const { palette } = useTheme();
   const primary = palette.primary.main;
@@ -25,7 +25,7 @@ const PostWidget = ({ postId, postUserId, name, description, location, imgLink, 
 
 
   const patchLike = async () => {
-    const response = await fetch(`https://vibes-teal.vercel.app/posts/${postId}/like`, {
+    const response = await fetch(`${apiURL}/posts/${postId}/like`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -40,7 +40,7 @@ const PostWidget = ({ postId, postUserId, name, description, location, imgLink, 
 
   return (
     <WidgetWrapper m={"2rem 0"}>
-      <Friend
+      <Friend apiURL={apiURL}
         friendId={postUserId}
         name={name}
         subtitle={location}

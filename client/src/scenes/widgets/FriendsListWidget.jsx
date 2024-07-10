@@ -4,7 +4,7 @@ import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { setFriends } from "../../state"
 
-const FriendsListWidget = ({ id }) => {
+const FriendsListWidget = ({ id, apiURL }) => {
 
     const { palette } = useTheme()
     const dark = palette.neutral.dark
@@ -15,7 +15,7 @@ const FriendsListWidget = ({ id }) => {
     const friends = useSelector(state => state.user.friends);
 
     const getFriends = async () => {
-        const response = await fetch(`https://vibes-teal.vercel.app/users/${id}/friends`, {
+        const response = await fetch(`${apiURL}/users/${id}/friends`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`
@@ -57,6 +57,7 @@ const FriendsListWidget = ({ id }) => {
                             name={`${firstName} ${lastName}`}
                             subtitle={occupation}
                             userImgLink={imgLink}
+                            apiURL={apiURL}
                         />
                     )) : <Typography
                         color={medium}

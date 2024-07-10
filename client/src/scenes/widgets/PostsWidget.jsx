@@ -5,7 +5,7 @@ import PostWidget from "./PostWidget";
 import { PropagateLoader } from "react-spinners"
 import { Box } from "@mui/material";
 
-const PostsWidget = ({ userId, isProfile=false }) => {
+const PostsWidget = ({ userId, isProfile=false, apiURL }) => {
     const dispatch = useDispatch();
     const posts = useSelector(state => state.posts);
     const token = useSelector(state => state.token);
@@ -14,7 +14,7 @@ const PostsWidget = ({ userId, isProfile=false }) => {
 
     const getPosts = async () => {
         
-    const response = await fetch(`https://vibes-teal.vercel.app/posts`, {
+    const response = await fetch(`${apiURL}/posts`, {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` }
     });
@@ -25,7 +25,7 @@ const PostsWidget = ({ userId, isProfile=false }) => {
     };
 
     const getUserPosts = async () => {
-        const response = await fetch(`https://vibes-teal.vercel.app/posts/${userId}/posts`, {
+        const response = await fetch(`${apiURL}/posts/${userId}/posts`, {
             method: "GET",
             headers: { Authorization: `Bearer ${token}` }
         });
@@ -59,6 +59,7 @@ const PostsWidget = ({ userId, isProfile=false }) => {
                     imgLink, fileLink, likes, comments
                 }) => (
                     <PostWidget
+                        apiURL={apiURL}
                         key={"key-"+_id}
                         postId={_id}
                         postUserId={userId}

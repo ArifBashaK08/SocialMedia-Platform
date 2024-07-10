@@ -48,7 +48,7 @@ const Form = () => {
   const isSignin = pageType === "signin";
   const isSignUp = pageType === "signup";
 
-  const apiURL = "http://localhost:3001"
+  const apiURL = "https://vibes-server.onrender.com"
 
   const signUp = async (values, onsubmitProps) => {
     // Allows us to send form data with image

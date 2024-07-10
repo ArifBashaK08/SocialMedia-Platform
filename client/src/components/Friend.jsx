@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux"
 import FlexBetween from "./FlexBetween"
 import UserImage from "./UserImage"
 
-const Friend = ({ friendId, name, subtitle, userImgLink }) => {
+const Friend = ({ friendId, name, subtitle, userImgLink, apiURL }) => {
     const { palette } = useTheme()
     const primaryLight = palette.primary.light
     const primaryDark = palette.primary.dark
@@ -29,7 +29,7 @@ const Friend = ({ friendId, name, subtitle, userImgLink }) => {
         });
     }
     const patchFriend = async () => {
-        const response = await fetch(`http://localhost:3001/users/${id}/${friendId}`,
+        const response = await fetch(`${apiURL}/users/${id}/${friendId}`,
             {
                 method: "PATCH",
                 headers: {
