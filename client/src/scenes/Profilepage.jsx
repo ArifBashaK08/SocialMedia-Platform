@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { Navbar, FriendsListWidget, MyPostWidget, PostsWidget, UserWidgets } from "."
 import { PropagateLoader } from "react-spinners"
+import { serverURL } from "./Homepage"
 
 const Profilepage = () => {
   const [loading, setLoading] = useState(false)
@@ -13,7 +14,7 @@ const Profilepage = () => {
   const { userid } = useParams()
 
   const getUser = async () => {
-    const response = await fetch(`http://localhost:3001/users/${userid}`, {
+    const response = await fetch(`${serverURL}/users/${userid}`, {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -54,7 +55,7 @@ const Profilepage = () => {
         gap="2rem"
         justifyContent="center">
         <Box flexBasis={isNotMobileScreen ? "26%" : undefined}>
-          <UserWidgets id={userid} image={user.imgLink} />
+          <UserWidgets apiURL={serverURL} id={userid} image={user.imgLink} />
           <Box m={"2rem 0"} />
           <FriendsListWidget id={userid} />
         </Box>
