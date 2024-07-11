@@ -1,13 +1,10 @@
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import Form from "../components/Form";
-import { bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10 } from "../assets/login"
 import { useEffect } from "react";
 
 const Loginpage = ({ title }) => {
   const theme = useTheme();
   const isNotMobileScreen = useMediaQuery("(min-width: 1000px)");
-  const loginBg = [bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10];
-  const randomBg = Math.floor(Math.random() * loginBg.length);
 
   useEffect(() => {
     document.title = `User authentication | ${title}`
@@ -17,7 +14,7 @@ const Loginpage = ({ title }) => {
     <Box
       sx={{
         overflow: "auto",
-        backgroundImage: `url(${loginBg[randomBg]})`,
+        backgroundImage: `linear-gradient(184deg, rgba(0, 255, 230, 1) 0%, rgba(7, 58, 187, 1) 100%)`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         height: '100vh',
@@ -39,7 +36,7 @@ const Loginpage = ({ title }) => {
             cursor: "pointer",
             fontWeight: 900,
             margin: 0,
-            background: 'linear-gradient(90deg, rgba(0, 0, 0, 1) 33%, rgba(255, 69, 56, 1) 100%)',
+            background: 'linear-gradient(90deg, rgba(31, 17, 206, 1) 0%, rgba(229, 43, 43, 1) 100%)',
             WebkitBackgroundClip: 'text',
             backgroundClip: 'text',
             color: 'transparent'

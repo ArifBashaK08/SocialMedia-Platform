@@ -2,11 +2,16 @@ import { Box, useMediaQuery } from "@mui/material"
 import { FriendsListWidget, Navbar } from "."
 import { useSelector } from "react-redux"
 import { UserWidgets, MyPostWidget, PostsWidget, AdWidget } from "."
+import { useEffect } from "react"
 export const serverURL = import.meta.env.VITE_API_URL|| "http://localhost:3002"
 
-const Homepage = () => {
+const Homepage = ({title}) => {
   const isNotMobileScreen = useMediaQuery("(min-width: 1000px)")
   const { _id, imgLink } = useSelector(state => state.user)
+
+useEffect(() => {
+document.title = `Home | ${title}`
+}, [])
 
   return <Box>
     <Navbar title={"Vibes.com"} />

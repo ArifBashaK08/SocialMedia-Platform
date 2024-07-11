@@ -2,16 +2,16 @@ import {
   EditOutlined, DeleteOutlined,
   AttachFileOutlined, GifBoxOutlined,
   ImageOutlined, MicOutlined, MoreHorizOutlined
-} from "@mui/icons-material"
+} from "@mui/icons-material";
 import {
   Box, Divider, Typography, InputBase,
   useTheme, Button, IconButton, useMediaQuery
-} from "@mui/material"
-import Dropzone from "react-dropzone"
-import { FlexBetween, UserImage, WidgetWrapper } from "../../components"
-import { useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { setPosts } from "../../state"
+} from "@mui/material";
+import Dropzone from "react-dropzone";
+import { FlexBetween, UserImage, WidgetWrapper } from "../../components";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setPosts } from "../../state";
 
 const MyPostWidget = ({ image, apiURL }) => {
   const dispatch = useDispatch();
@@ -26,23 +26,32 @@ const MyPostWidget = ({ image, apiURL }) => {
   const medium = palette.neutral.medium;
 
   const handlePost = async () => {
-    const formData = new FormData();
-    formData.append("userId", _id);
-    formData.append("description", post);
-    if (postImage) {
-      formData.append("file", postImage);
-      formData.append("image", postImage.name);
-    }
+    try {
+      const formData = new FormData();
+      formData.append("userId", _id);
+      formData.append("description", post);
+      if (postImage) {
+        formData.append("file", postImage);
+        formData.append("image", postImage.name);
+      }
 
-    const response = await fetch(`${apiURL}/posts`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}` },
-      body: formData,
-    });
-    const posts = await response.json();
-    dispatch(setPosts({ posts }));
-    setPostImage(null);
-    setPost("");
+      const response = await fetch(`${apiURL}/posts`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create post");
+      }
+
+      const posts = await response.json();
+      dispatch(setPosts({ posts }));
+      setPostImage(null);
+      setPost("");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
