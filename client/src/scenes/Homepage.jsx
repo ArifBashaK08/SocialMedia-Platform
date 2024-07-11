@@ -2,7 +2,7 @@ import { Box, useMediaQuery } from "@mui/material"
 import { FriendsListWidget, Navbar } from "."
 import { useSelector } from "react-redux"
 import { UserWidgets, MyPostWidget, PostsWidget, AdWidget } from "."
-export const serverURL = "https://vibes-server.onrender.com"
+export const serverURL = import.meta.env.VITE_API_URL|| "http://localhost:3002"
 
 const Homepage = () => {
   const isNotMobileScreen = useMediaQuery("(min-width: 1000px)")
