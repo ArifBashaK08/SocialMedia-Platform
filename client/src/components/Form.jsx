@@ -210,7 +210,7 @@ const Form = () => {
                       >
                         <input {...getInputProps()} />
                         {!values.profilePic ? (
-                          <p>Add Image here</p>
+                          <p>Wanna add your profile pic? Tap here...</p>
                         ) : (
                           <FlexBetween>
                             <Typography>{values.profilePic.name}</Typography>
