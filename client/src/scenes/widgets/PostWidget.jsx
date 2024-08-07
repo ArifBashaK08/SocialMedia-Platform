@@ -34,6 +34,18 @@ const PostWidget = ({
   const isLiked = Boolean(likes[loggedInUserId]);
   const likesCount = Object.keys(likes).length;
 
+//const isLiked = Boolean(likes[loggedInUserId])
+
+//const [like, setLike] = useState(isLiked)
+
+//. 
+//.
+//.
+//.
+//<button onClick={() => setLike(!like)}>Like me</button>
+
+//this code will work fine if user already liked then unlike and if not liked
+  
   const patchLike = async () => {
     try {
       const response = await fetch(`${apiURL}/posts/${postId}/like`, {

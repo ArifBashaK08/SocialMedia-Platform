@@ -213,6 +213,7 @@ const Form = () => {
                     borderRadius="5px"
                     p="1rem"
                   >
+<<<<<<< HEAD
                     <Dropzone
                       acceptedFiles=".jpg, .jpeg, .png"
                       multiple={false}
@@ -292,6 +293,85 @@ const Form = () => {
                 }}
                 sx={{
                   textDecoration: "underline",
+=======
+                    {({ getRootProps, getInputProps }) => (
+                      <Box
+                        {...getRootProps()}
+                        border={`2px dashed ${palette.primary.main}`}
+                        p="1rem"
+                        sx={{
+                          "&:hover": { cursor: "pointer" },
+                        }}
+                      >
+                        <input {...getInputProps()} />
+                        {!values.profilePic ? (
+                          <p>Wanna add your profile pic? Tap here...</p>
+                        ) : (
+                          <FlexBetween>
+                            <Typography>{values.profilePic.name}</Typography>
+                            <EditOutlinedIcon />
+                          </FlexBetween>
+                        )}
+                      </Box>
+                    )}
+                  </Dropzone>
+                </Box>
+              </>
+            )}
+            {isSignin && (
+              <>
+                <TextField
+                  label="Email"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.email}
+                  name="email"
+                  error={Boolean(touched.email) && Boolean(errors.email)}
+                  helperText={touched.email && errors.email}
+                  sx={{ gridColumn: "span 4" }}
+                />
+                <TextField
+                  label="Password"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.password}
+                  name="password"
+                  type="password"
+                  error={Boolean(touched.password) && Boolean(errors.password)}
+                  helperText={touched.password && errors.password}
+                  sx={{ gridColumn: "span 4" }}
+                />
+              </>
+            )}
+          </Box>
+          {/* Buttons */}
+          <Box>
+            <Button
+              fullWidth
+              type="submit"
+              sx={{
+                fontSize: "1rem",
+                fontWeight: 900,
+                m: "2rem 0",
+                p: "1rem",
+                background: palette.primary.main,
+                color: palette.background.alt,
+                "&:hover": { color: palette.primary.main },
+              }}
+            >
+              {isSignin ? "Sign In" : "Sign Up"}
+            </Button>
+            <Typography
+              onClick={() => {
+                setPageType(isSignin ? "signup" : "signin");
+                resetForm();
+              }}
+              sx={{
+                textDecoration: "underline",
+                color: palette.primary.main,
+                "&:hover": {
+                  cursor: "pointer",
+>>>>>>> ee32dd243770b4109f6c230a8568d3f65382d5f1
                   color: palette.primary.main,
                   "&:hover": {
                     cursor: "pointer",
