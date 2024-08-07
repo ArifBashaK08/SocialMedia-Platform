@@ -53,8 +53,6 @@ app.get("/", (req, res) => {
 })
 app.post("/signup", upload.single("profilePic"), signUp);
 app.post("/posts", verifyToken, upload.single("file"), (req, res, next) => {
-    console.log(req.body); // Log the body fields
-    console.log(req.file); // Log the file field
     next();
 }, createPost)
 

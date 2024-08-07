@@ -3,7 +3,6 @@ import Form from "../components/Form";
 import { useEffect } from "react";
 
 const Loginpage = ({ title }) => {
-  const theme = useTheme();
   const isNotMobileScreen = useMediaQuery("(min-width: 1000px)");
 
   useEffect(() => {

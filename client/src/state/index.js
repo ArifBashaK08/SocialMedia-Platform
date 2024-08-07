@@ -5,6 +5,7 @@ const initialState = {
     user: null,
     token: null,
     posts: [],
+    loading: false
 }
 
 export const authSlice = createSlice({
@@ -13,6 +14,9 @@ export const authSlice = createSlice({
     reducers: {
         setMode: (state) => {
             state.mode = state.mode === "light" ? "dark" : "light"
+        },
+        setLoading: (state, action) => {
+            state.loading = action.payload
         },
 
         setLogin: (state, action) => {
@@ -45,6 +49,6 @@ export const authSlice = createSlice({
     }
 })
 
-export const { setMode, setLogin, setLogout, setFriends, setPost, setPosts } = authSlice.actions
+export const { setMode, setLogin, setLogout, setFriends, setPost, setPosts, setLoading } = authSlice.actions
 
 export default authSlice.reducer

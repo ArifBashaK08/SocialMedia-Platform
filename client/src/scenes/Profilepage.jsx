@@ -18,7 +18,7 @@ const Profilepage = () => {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
     });
-    const data = await response.json();
+    const data = await response.json();    
     setUser(data);
   };
 
@@ -64,7 +64,7 @@ const Profilepage = () => {
         <Box flexBasis={isNotMobileScreen ? "42%" : undefined} mt={isNotMobileScreen ? undefined : "2rem"}>
           <MyPostWidget image={user.imgLink} />
           <Box m="2rem 0" />
-          <PostsWidget userId={userid} isProfile />
+          <PostsWidget userId={userid} isProfile apiURL={serverURL} />
         </Box>
       </Box>
     </Box>

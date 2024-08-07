@@ -15,11 +15,7 @@ const getUser = async (req, res) => {
     try {
         const { id } = req.params
 
-        console.log("ID - ", id);
-
         const foundUser = await UserModel.findById(id)
-
-        console.log("User - ", foundUser);
 
         if (!foundUser) return res.status(404).json({ msg: "User not found..!" })
 

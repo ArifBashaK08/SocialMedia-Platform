@@ -3,7 +3,7 @@ import { FriendsListWidget, Navbar } from "."
 import { useSelector } from "react-redux"
 import { UserWidgets, MyPostWidget, PostsWidget, AdWidget } from "."
 import { useEffect } from "react"
-export const serverURL = import.meta.env.VITE_API_URL|| "http://localhost:3002"
+export const serverURL = import.meta.env.VITE_API_URL || "http://localhost:3002"
 
 const Homepage = ({title}) => {
   const isNotMobileScreen = useMediaQuery("(min-width: 1000px)")

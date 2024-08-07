@@ -4,10 +4,11 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setLogin } from "../state";
+import { useDispatch, useSelector } from "react-redux";
+import { setLogin, setLoading } from "../state";
 import Dropzone from "react-dropzone";
 import FlexBetween from "./FlexBetween";
+import { PropagateLoader } from "react-spinners";
 
 const signUpSchema = yup.object().shape({
   firstName: yup.string().required("Required"),
@@ -42,6 +43,8 @@ const signInInitialValues = {
 const Form = () => {
   const [pageType, setPageType] = useState("signin");
   const { palette } = useTheme();
+  const loading = useSelector(state => state.loading)
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isNonMobile = useMediaQuery("(min-width: 600px)");
@@ -51,6 +54,7 @@ const Form = () => {
   const apiURL = "https://vibes-server.onrender.com"
 
   const signUp = async (values, onsubmitProps) => {
+    dispatch(setLoading(true))
     // Allows us to send form data with image
     const formData = new FormData();
     for (let value in values) {
@@ -64,13 +68,14 @@ const Form = () => {
     });
     const savedUser = await saveResponse.json();
     onsubmitProps.resetForm();
-
+    dispatch(setLoading(false))
     if (savedUser) {
       setPageType("signin");
     }
   };
 
   const signIn = async (values, onsubmitProps) => {
+    dispatch(setLoading(true))
     try {
       const logInResponse = await fetch(`${apiURL}/auth/signin`, {
         method: "POST",
@@ -86,12 +91,16 @@ const Form = () => {
             token: loggedIn.token,
           })
         );
+        dispatch(setLoading(false))
         navigate("/home");
       } else {
+        dispatch(setLoading(false))
         navigate("*", { state: { message: loggedIn.message } })
       }
     } catch (error) {
       console.error("Failed to login", error);
+    } finally {
+      dispatch(setLoading(false))
     }
   }
 
@@ -101,191 +110,203 @@ const Form = () => {
   };
 
   return (
-    <Formik
-      onSubmit={formHandler}
-      initialValues={isSignin ? signInInitialValues : signUpInitialValues}
-      validationSchema={isSignin ? signInSchema : signUpSchema}
-    >
-      {({
-        values,
-        errors,
-        touched,
-        handleBlur,
-        handleChange,
-        handleSubmit,
-        setFieldValue,
-        resetForm,
-      }) => (
-        <form onSubmit={handleSubmit}>
-          <Box
-            display="grid"
-            gap="30px"
-            gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-            sx={{
-              "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
-            }}
-          >
-            {isSignUp && (
-              <>
-                <TextField
-                  label="First Name"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.firstName}
-                  name="firstName"
-                  error={Boolean(touched.firstName) && Boolean(errors.firstName)}
-                  helperText={touched.firstName && errors.firstName}
-                  sx={{ gridColumn: "span 2" }}
-                />
-                <TextField
-                  label="Last Name"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.lastName}
-                  name="lastName"
-                  error={Boolean(touched.lastName) && Boolean(errors.lastName)}
-                  helperText={touched.lastName && errors.lastName}
-                  sx={{ gridColumn: "span 2" }}
-                />
-                <TextField
-                  label="Location"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.location}
-                  name="location"
-                  error={Boolean(touched.location) && Boolean(errors.location)}
-                  helperText={touched.location && errors.location}
-                  sx={{ gridColumn: "span 4" }}
-                />
-                <TextField
-                  label="Occupation"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.occupation}
-                  name="occupation"
-                  error={Boolean(touched.occupation) && Boolean(errors.occupation)}
-                  helperText={touched.occupation && errors.occupation}
-                  sx={{ gridColumn: "span 4" }}
-                />
-                <TextField
-                  label="Email"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.email}
-                  name="email"
-                  error={Boolean(touched.email) && Boolean(errors.email)}
-                  helperText={touched.email && errors.email}
-                  sx={{ gridColumn: "span 4" }}
-                />
-                <TextField
-                  label="Password"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.password}
-                  name="password"
-                  type="password"
-                  error={Boolean(touched.password) && Boolean(errors.password)}
-                  helperText={touched.password && errors.password}
-                  sx={{ gridColumn: "span 4" }}
-                />
-                <Box
-                  gridColumn="span 4"
-                  border={`1px solid ${palette.neutral.medium}`}
-                  borderRadius="5px"
-                  p="1rem"
-                >
-                  <Dropzone
-                    acceptedFiles=".jpg, .jpeg, .png"
-                    multiple={false}
-                    onDrop={(acceptedFiles) => setFieldValue("profilePic", acceptedFiles[0])}
+    <>
+      {loading &&
+        <Box sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          zIndex: 50,
+        }}>
+          <PropagateLoader color="#0091ff" />
+        </Box >}
+      <Formik
+        onSubmit={formHandler}
+        initialValues={isSignin ? signInInitialValues : signUpInitialValues}
+        validationSchema={isSignin ? signInSchema : signUpSchema}
+      >
+        {({
+          values,
+          errors,
+          touched,
+          handleBlur,
+          handleChange,
+          handleSubmit,
+          setFieldValue,
+          resetForm,
+        }) => (
+          <form onSubmit={handleSubmit}>
+            <Box
+              display="grid"
+              gap="30px"
+              gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+              sx={{
+                "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
+              }}
+            >
+              {isSignUp && (
+                <>
+                  <TextField
+                    label="First Name"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.firstName}
+                    name="firstName"
+                    error={Boolean(touched.firstName) && Boolean(errors.firstName)}
+                    helperText={touched.firstName && errors.firstName}
+                    sx={{ gridColumn: "span 2" }}
+                  />
+                  <TextField
+                    label="Last Name"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.lastName}
+                    name="lastName"
+                    error={Boolean(touched.lastName) && Boolean(errors.lastName)}
+                    helperText={touched.lastName && errors.lastName}
+                    sx={{ gridColumn: "span 2" }}
+                  />
+                  <TextField
+                    label="Location"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.location}
+                    name="location"
+                    error={Boolean(touched.location) && Boolean(errors.location)}
+                    helperText={touched.location && errors.location}
+                    sx={{ gridColumn: "span 4" }}
+                  />
+                  <TextField
+                    label="Occupation"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.occupation}
+                    name="occupation"
+                    error={Boolean(touched.occupation) && Boolean(errors.occupation)}
+                    helperText={touched.occupation && errors.occupation}
+                    sx={{ gridColumn: "span 4" }}
+                  />
+                  <TextField
+                    label="Email"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.email}
+                    name="email"
+                    error={Boolean(touched.email) && Boolean(errors.email)}
+                    helperText={touched.email && errors.email}
+                    sx={{ gridColumn: "span 4" }}
+                  />
+                  <TextField
+                    label="Password"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.password}
+                    name="password"
+                    type="password"
+                    error={Boolean(touched.password) && Boolean(errors.password)}
+                    helperText={touched.password && errors.password}
+                    sx={{ gridColumn: "span 4" }}
+                  />
+                  <Box
+                    gridColumn="span 4"
+                    border={`1px solid ${palette.neutral.medium}`}
+                    borderRadius="5px"
+                    p="1rem"
                   >
-                    {({ getRootProps, getInputProps }) => (
-                      <Box
-                        {...getRootProps()}
-                        border={`2px dashed ${palette.primary.main}`}
-                        p="1rem"
-                        sx={{
-                          "&:hover": { cursor: "pointer" },
-                        }}
-                      >
-                        <input {...getInputProps()} />
-                        {!values.profilePic ? (
-                          <p>Add Image here</p>
-                        ) : (
-                          <FlexBetween>
-                            <Typography>{values.profilePic.name}</Typography>
-                            <EditOutlinedIcon />
-                          </FlexBetween>
-                        )}
-                      </Box>
-                    )}
-                  </Dropzone>
-                </Box>
-              </>
-            )}
-            {isSignin && (
-              <>
-                <TextField
-                  label="Email"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.email}
-                  name="email"
-                  error={Boolean(touched.email) && Boolean(errors.email)}
-                  helperText={touched.email && errors.email}
-                  sx={{ gridColumn: "span 4" }}
-                />
-                <TextField
-                  label="Password"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.password}
-                  name="password"
-                  type="password"
-                  error={Boolean(touched.password) && Boolean(errors.password)}
-                  helperText={touched.password && errors.password}
-                  sx={{ gridColumn: "span 4" }}
-                />
-              </>
-            )}
-          </Box>
-          {/* Buttons */}
-          <Box>
-            <Button
-              fullWidth
-              type="submit"
-              sx={{
-                fontSize: "1rem",
-                fontWeight: 900,
-                m: "2rem 0",
-                p: "1rem",
-                background: palette.primary.main,
-                color: palette.background.alt,
-                "&:hover": { color: palette.primary.main },
-              }}
-            >
-              {isSignin ? "Sign In" : "Sign Up"}
-            </Button>
-            <Typography
-              onClick={() => {
-                setPageType(isSignin ? "signup" : "signin");
-                resetForm();
-              }}
-              sx={{
-                textDecoration: "underline",
-                color: palette.primary.main,
-                "&:hover": {
-                  cursor: "pointer",
+                    <Dropzone
+                      acceptedFiles=".jpg, .jpeg, .png"
+                      multiple={false}
+                      onDrop={(acceptedFiles) => setFieldValue("profilePic", acceptedFiles[0])}
+                    >
+                      {({ getRootProps, getInputProps }) => (
+                        <Box
+                          {...getRootProps()}
+                          border={`2px dashed ${palette.primary.main}`}
+                          p="1rem"
+                          sx={{
+                            "&:hover": { cursor: "pointer" },
+                          }}
+                        >
+                          <input {...getInputProps()} />
+                          {!values.profilePic ? (
+                            <p>Add Image here</p>
+                          ) : (
+                            <FlexBetween>
+                              <Typography>{values.profilePic.name}</Typography>
+                              <EditOutlinedIcon />
+                            </FlexBetween>
+                          )}
+                        </Box>
+                      )}
+                    </Dropzone>
+                  </Box>
+                </>
+              )}
+              {isSignin && (
+                <>
+                  <TextField
+                    label="Email"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.email}
+                    name="email"
+                    error={Boolean(touched.email) && Boolean(errors.email)}
+                    helperText={touched.email && errors.email}
+                    sx={{ gridColumn: "span 4" }}
+                  />
+                  <TextField
+                    label="Password"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.password}
+                    name="password"
+                    type="password"
+                    error={Boolean(touched.password) && Boolean(errors.password)}
+                    helperText={touched.password && errors.password}
+                    sx={{ gridColumn: "span 4" }}
+                  />
+                </>
+              )}
+            </Box>
+            {/* Buttons */}
+            <Box>
+              <Button
+                fullWidth
+                type="submit"
+                sx={{
+                  fontSize: "1rem",
+                  fontWeight: 900,
+                  m: "2rem 0",
+                  p: "1rem",
+                  background: palette.primary.main,
+                  color: palette.background.alt,
+                  "&:hover": { color: palette.primary.main },
+                }}
+              >
+                {isSignin ? "Sign In" : "Sign Up"}
+              </Button>
+              <Typography
+                onClick={() => {
+                  setPageType(isSignin ? "signup" : "signin");
+                  resetForm();
+                }}
+                sx={{
+                  textDecoration: "underline",
                   color: palette.primary.main,
-                },
-              }}
-            >
-              {isSignin ? "Don't have an account? Sign Up" : "Already have an account? Sign In"}
-            </Typography>
-          </Box>
-        </form>
-      )}
-    </Formik>
+                  "&:hover": {
+                    cursor: "pointer",
+                    color: palette.primary.main,
+                  },
+                }}
+              >
+                {isSignin ? "Don't have an account? Sign Up" : "Already have an account? Sign In"}
+              </Typography>
+            </Box>
+          </form>
+        )}
+      </Formik>
+
+    </>
   );
 };
 

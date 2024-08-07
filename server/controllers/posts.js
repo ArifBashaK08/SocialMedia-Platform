@@ -68,9 +68,10 @@ export const getFeedPost = async (req, res) => {
 
 // Get user posts
 export const getUserPosts = async (req, res) => {
+    
     try {
         const { userId } = req.params
-
+        
         const posts = await PostModel.find({ userId })
 
         return res.status(200).json(posts)
