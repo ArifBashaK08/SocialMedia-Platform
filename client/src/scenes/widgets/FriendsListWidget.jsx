@@ -45,7 +45,7 @@ const FriendsListWidget = ({ id, apiURL }) => {
         fontWeight={700}
         sx={{ mb: "1.5rem" }}
       >
-        Friends
+        My Friends
       </Typography>
       <Box
         display="flex"
@@ -55,6 +55,7 @@ const FriendsListWidget = ({ id, apiURL }) => {
         {friends.length > 0 ? (
           friends.map(({ _id, firstName, lastName, occupation, imgLink }) => (
             <Friend
+              hideTime={friends}
               key={_id}
               friendId={_id}
               name={`${firstName} ${lastName}`}

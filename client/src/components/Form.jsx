@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLogin, setLoading } from "../state";
 import Dropzone from "react-dropzone";
 import FlexBetween from "./FlexBetween";
+import { serverURL } from "../scenes/Homepage";
 import { PropagateLoader } from "react-spinners";
 
 const signUpSchema = yup.object().shape({
@@ -43,15 +44,12 @@ const signInInitialValues = {
 const Form = () => {
   const [pageType, setPageType] = useState("signin");
   const { palette } = useTheme();
-  const loading = useSelector(state => state.loading)
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isNonMobile = useMediaQuery("(min-width: 600px)");
   const isSignin = pageType === "signin";
   const isSignUp = pageType === "signup";
-
-  const apiURL = "https://vibes-server.onrender.com"
+  const loading = useSelector(state => state.loading)
 
   const signUp = async (values, onsubmitProps) => {
     dispatch(setLoading(true))
@@ -62,14 +60,15 @@ const Form = () => {
     }
     formData.append("profilePic", values.profilePic.name);
 
-    const saveResponse = await fetch(`${apiURL}/signup`, {
+    const saveResponse = await fetch(`${serverURL}/signup`, {
       method: "POST",
       body: formData,
     });
     const savedUser = await saveResponse.json();
     onsubmitProps.resetForm();
-    dispatch(setLoading(false))
+
     if (savedUser) {
+      dispatch(setLoading(false))
       setPageType("signin");
     }
   };
@@ -77,7 +76,7 @@ const Form = () => {
   const signIn = async (values, onsubmitProps) => {
     dispatch(setLoading(true))
     try {
-      const logInResponse = await fetch(`${apiURL}/auth/signin`, {
+      const logInResponse = await fetch(`${serverURL}/auth/signin`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
@@ -94,13 +93,11 @@ const Form = () => {
         dispatch(setLoading(false))
         navigate("/home");
       } else {
-        dispatch(setLoading(false))
         navigate("*", { state: { message: loggedIn.message } })
       }
     } catch (error) {
-      console.error("Failed to login", error);
-    } finally {
       dispatch(setLoading(false))
+      console.error("Failed to login", error);
     }
   }
 
@@ -114,12 +111,21 @@ const Form = () => {
       {loading &&
         <Box sx={{
           position: "absolute",
-          top: "50%",
-          left: "50%",
-          zIndex: 50,
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 10,
+          borderRadius: "1.5rem",
+          backdropFilter: "blur(5px)",
+          backgroundColor: "rgba(255, 255, 255, 0.2)",
         }}>
           <PropagateLoader color="#0091ff" />
-        </Box >}
+        </Box>
+      }
       <Formik
         onSubmit={formHandler}
         initialValues={isSignin ? signInInitialValues : signUpInitialValues}
@@ -230,7 +236,7 @@ const Form = () => {
                         >
                           <input {...getInputProps()} />
                           {!values.profilePic ? (
-                            <p>Add Image here</p>
+                            <p>Wanna add your profile pic? Tap here...</p>
                           ) : (
                             <FlexBetween>
                               <Typography>{values.profilePic.name}</Typography>
@@ -385,7 +391,6 @@ const Form = () => {
           </form>
         )}
       </Formik>
-
     </>
   );
 };

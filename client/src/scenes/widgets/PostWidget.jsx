@@ -10,23 +10,26 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "../../state";
 import { Friend } from "../../components";
+import Comments from "../../components/Comments";
 
 const PostWidget = ({
   apiURL,
   postId,
   postUserId,
   name,
-  description,
+  postDescription,
   location,
   imgLink,
   fileLink,
   likes = {},
   comments = [],
+  createdAt
 }) => {
   const { palette } = useTheme();
   const primary = palette.primary.main;
   const main = palette.neutral.main;
 
+  const [addComment, setAddComment] = useState("")
   const [isComments, setIsComments] = useState(false);
   const dispatch = useDispatch();
   const token = useSelector((state) => state.token);
@@ -69,16 +72,20 @@ const PostWidget = ({
   };
 
   return (
-    <WidgetWrapper m="2rem 0">
+    <WidgetWrapper sx={{
+      m:"2rem 0",
+      position:"relative"
+    }}>
       <Friend
         apiURL={apiURL}
         friendId={postUserId}
         name={name}
         subtitle={location}
         userImgLink={imgLink}
+        createdAt={createdAt}
       />
       <Typography color={main} sx={{ mt: "1rem" }}>
-        {description}
+        {postDescription}
       </Typography>
       {fileLink && (
         <img
@@ -116,23 +123,7 @@ const PostWidget = ({
       </FlexBetween>
 
       {isComments && (
-        <Box mt=".5rem">
-          {comments.map((comment, i) => (
-            <Box key={`${name}-${i}`}>
-              <Divider />
-              <Typography
-                sx={{
-                  color: main,
-                  m: ".5rem 0",
-                  pl: "1rem",
-                }}
-              >
-                {comment}
-              </Typography>
-            </Box>
-          ))}
-          <Divider />
-        </Box>
+        <Comments commentsActive={comments} addComment={addComment} setAddComment={setAddComment} />
       )}
     </WidgetWrapper>
   );

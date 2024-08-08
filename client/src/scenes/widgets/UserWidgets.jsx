@@ -10,6 +10,7 @@ import { UserImage, FlexBetween, WidgetWrapper } from "../../components";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import PropTypes from 'prop-types';
 
 const UserWidgets = ({ id, image, apiURL }) => {
   const [user, setUser] = useState(null);
@@ -91,7 +92,7 @@ const UserWidgets = ({ id, image, apiURL }) => {
       {/* 3rd Row */}
       <Box p="1rem 0">
         <FlexBetween mb=".5rem">
-          <Typography color={medium}>Who's viewed your profile?</Typography>
+          <Typography color={medium}>Who&apos;s viewed your profile?</Typography>
           <Typography color={main} fontWeight={500}>{profileViews}</Typography>
         </FlexBetween>
         <FlexBetween mb=".5rem">
@@ -132,6 +133,12 @@ const UserWidgets = ({ id, image, apiURL }) => {
       </Box>
     </WidgetWrapper>
   );
+};
+
+UserWidgets.propTypes = {
+  id: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
+  apiURL: PropTypes.string.isRequired,
 };
 
 export default UserWidgets;

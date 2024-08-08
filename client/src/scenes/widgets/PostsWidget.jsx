@@ -1,37 +1,32 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts, setLoading } from "../../state";
 import PostWidget from "./PostWidget";
-import { PropagateLoader } from "react-spinners";
 import { Box } from "@mui/material";
+import { PropagateLoader } from "react-spinners";
 
 const PostsWidget = ({ userId, isProfile = false, apiURL }) => {
   const dispatch = useDispatch();
-  const posts = useSelector((state) => state.posts); // Adjust according to your slice name
-  const token = useSelector((state) => state.token); // Adjust according to your slice name
-  const loading = useSelector((state) => state.loading); // Adjust according to your slice name
+  const posts = useSelector((state) => state.posts);
+  const token = useSelector((state) => state.token);
+  const loading = useSelector(state => state.loading);
 
-
-const getPosts = async () => {
-  dispatch(setLoading(true));
-  try {
-    const response = await fetch(`${apiURL}/posts`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    console.log("API URL: ", apiURL);
+  const getPosts = async () => {
+    dispatch(setLoading(true));
+    try {
+      const response = await fetch(`${apiURL}/posts`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (!response.ok) {
-        throw new Error(`Failed to fetch posts: ${response.status} ${response.statusText}`);
+        throw new Error("Failed to fetch posts");
       }
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        const data = await response.json();
-        dispatch(setPosts({ posts: data }));
-      } else {
-        throw new Error("Received non-JSON response");
-      }
+      const data = await response.json();
+      dispatch(setLoading(false));
+      dispatch(setPosts({ posts: data }));
     } catch (error) {
-      console.error("Error fetching posts:", error);
+      dispatch(setLoading(false));
+      console.error(error);
     } finally {
       dispatch(setLoading(false));
     }
@@ -45,17 +40,14 @@ const getPosts = async () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!response.ok) {
-        throw new Error(`Failed to fetch user posts: ${response.status} ${response.statusText}`);
+        throw new Error("Failed to fetch user posts");
       }
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        const data = await response.json();
-        dispatch(setPosts({ posts: data }));
-      } else {
-        throw new Error("Received non-JSON response");
-      }
+      const data = await response.json();
+      dispatch(setLoading(false));
+      dispatch(setPosts({ posts: data }));
     } catch (error) {
-      console.error("Error fetching user posts:", error);
+      dispatch(setLoading(false));
+      console.error(error);
     } finally {
       dispatch(setLoading(false));
     }
@@ -67,23 +59,26 @@ const getPosts = async () => {
     } else {
       getPosts();
     }
-  }, [userId, isProfile]);
+  }, [isProfile]);
 
-  if (loading) {
-    return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-        <PropagateLoader color="#0091ff" />
-      </Box>
-    );
-  }
 
   return (
     <>
-      {posts.map(
+      {loading &&
+        <Box sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh"
+        }}>
+          <PropagateLoader color="#0091ff" />
+        </Box>
+      }
+      {posts && posts.length > 0 ? posts.map(
         ({
           _id, userId, firstName,
           lastName, description, location,
-          imgLink, fileLink, likes, comments
+          imgLink, fileLink, likes, comments, createdAt
         }) => (
           <PostWidget
             apiURL={apiURL}
@@ -97,8 +92,23 @@ const getPosts = async () => {
             fileLink={fileLink}
             likes={likes}
             comments={comments}
+            createdAt={createdAt}
           />
         )
+      ) : isProfile && (
+        <>
+          <Box sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontWeight: 800,
+            fontSize: "2rem",
+            color: "gray",
+            height: "20rem"
+          }}>
+            No posts to dispaly!
+          </Box>
+        </>
       )}
     </>
   );
