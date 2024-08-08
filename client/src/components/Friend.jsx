@@ -6,8 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import FlexBetween from "./FlexBetween";
 import UserImage from "./UserImage";
+import moment from "moment";
 
-const Friend = ({ friendId, name, subtitle, userImgLink, apiURL }) => {
+const Friend = ({ friendId, name, userImgLink, apiURL, createdAt, hideTime }) => {
   const { palette } = useTheme();
   const primaryLight = palette.primary.light;
   const primaryDark = palette.primary.dark;
@@ -53,10 +54,10 @@ const Friend = ({ friendId, name, subtitle, userImgLink, apiURL }) => {
           sx={{ cursor: "pointer" }}
         >
           <Typography
-            color={main}
             variant="h5"
-            fontWeight={500}
             sx={{
+              color: main,
+              fontWeight: 500,
               "&:hover": {
                 color: palette.primary.light,
               },
@@ -64,8 +65,11 @@ const Friend = ({ friendId, name, subtitle, userImgLink, apiURL }) => {
           >
             {name}
           </Typography>
-          <Typography color={medium} fontSize=".75rem">
-            {subtitle}
+          <Typography sx={{
+            color: medium,
+            fontSize: ".75rem"
+          }}>
+            {!hideTime && moment(createdAt).fromNow()}
           </Typography>
         </Box>
       </FlexBetween>

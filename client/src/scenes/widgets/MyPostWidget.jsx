@@ -11,7 +11,8 @@ import Dropzone from "react-dropzone";
 import { FlexBetween, UserImage, WidgetWrapper } from "../../components";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPosts } from "../../state";
+import { setPosts, setLoading } from "../../state";
+import { PropagateLoader } from "react-spinners";
 
 const MyPostWidget = ({ image, apiURL }) => {
   const dispatch = useDispatch();
@@ -21,11 +22,13 @@ const MyPostWidget = ({ image, apiURL }) => {
   const { palette } = useTheme();
   const { _id } = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
+  const loading = useSelector((state) => state.loading);
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
 
   const handlePost = async () => {
+    dispatch(setLoading(true))
     try {
       const formData = new FormData();
       formData.append("userId", _id);
@@ -34,27 +37,40 @@ const MyPostWidget = ({ image, apiURL }) => {
         formData.append("file", postImage);
         formData.append("image", postImage.name);
       }
-
+      
       const response = await fetch(`${apiURL}/posts`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
       });
-
+      
       if (!response.ok) {
+        dispatch(setLoading(false))        
         throw new Error("Failed to create post");
       }
-
+      
       const posts = await response.json();
       dispatch(setPosts({ posts }));
       setPostImage(null);
+      dispatch(setLoading(false))        
       setPost("");
     } catch (error) {
+      dispatch(setLoading(false))        
       console.error(error);
     }
   };
 
   return (
+    <>
+    {loading && 
+    <Box sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+        }}>
+            <PropagateLoader color="#0091ff" />
+        </Box>
+    }
     <WidgetWrapper>
       <FlexBetween gap="1.5rem">
         <UserImage image={image} size={"70px"} />
@@ -164,6 +180,7 @@ const MyPostWidget = ({ image, apiURL }) => {
         </Button>
       </FlexBetween>
     </WidgetWrapper>
+    </>
   );
 };
 
